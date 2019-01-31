@@ -8,6 +8,7 @@ const lodash_1 = __importDefault(require("lodash"));
 const axios_1 = __importDefault(require("axios"));
 const feedparser_1 = __importDefault(require("feedparser"));
 const bluebird_1 = __importDefault(require("bluebird"));
+;
 class FeedError extends Error {
     constructor(type, message, feed) {
         super();
@@ -21,7 +22,7 @@ class FeedEmitter extends tiny_emitter_1.default {
     constructor(options = {}) {
         super();
         this._feedList = [];
-        this._userAgent = options.userAgent || "RssFeedEmitter (https://github.com/kurozeropb/RssFeedEmitter)";
+        this._userAgent = options.userAgent || "RssEmitter/v0.0.1 (https://github.com/kurozeropb/RssEmitter)";
         this._historyLengthMultiplier = 3;
     }
     add(feedConfig) {
@@ -94,7 +95,7 @@ class FeedEmitter extends tiny_emitter_1.default {
                 if (error.type === "feed_not_found") {
                     return;
                 }
-                self.emit("error", error);
+                self.emit("feed:error", error);
             });
             function findFeed(data) {
                 let foundFeed = self._findFeed({ url: data.feedUrl, items: [] });
@@ -141,7 +142,7 @@ class FeedEmitter extends tiny_emitter_1.default {
     _addItemToItemList(feed, item) {
         feed.items.push(item);
         feed.items = lodash_1.default.takeRight(feed.items, feed.maxHistoryLength);
-        this.emit("new-item", item);
+        this.emit("item:new", item);
     }
     _fetchFeed(feedUrl) {
         return new bluebird_1.default((reslove, reject) => {

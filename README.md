@@ -3,7 +3,7 @@ Emit rss feed items, written in TypeScript
 
 # Example
 ```ts
-import RssFeedEmitter, { FeedItem, FeedError } from "feed-emitter-ts";
+import RssFeedEmitter, { FeedItem, FeedError } from "rss-emitter-ts";
 
 const emitter = new RssFeedEmitter();
 
