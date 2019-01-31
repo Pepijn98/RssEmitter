@@ -66,7 +66,7 @@ export class FeedEmitter extends TinyEmitter {
         super();
 
         this._feedList = [];
-        this._userAgent = options.userAgent || "RssEmitter/v0.0.3 (https://github.com/kurozeropb/RssEmitter)";
+        this._userAgent = options.userAgent || "RssEmitter/v0.0.4 (https://github.com/kurozeropb/RssEmitter)";
         this._historyLengthMultiplier = 3;
         this._isFirst = true;
         this.options = options;
@@ -239,10 +239,7 @@ export class FeedEmitter extends TinyEmitter {
                 }
 
                 const stream = response.data.pipe(feedparser);
-                stream.once("finish", () => {
-                    console.log(data.items.length);
-                    reslove(data);
-                });
+                stream.once("finish", () => reslove(data));
             }).catch(() => {
                 reject(new FeedError("fetch_url_error", `Cannot connect to ${feedUrl}`, feedUrl));
             });

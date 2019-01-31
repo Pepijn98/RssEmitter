@@ -22,7 +22,7 @@ class FeedEmitter extends tiny_emitter_1.default {
     constructor(options = {}) {
         super();
         this._feedList = [];
-        this._userAgent = options.userAgent || "RssEmitter/v0.0.1 (https://github.com/kurozeropb/RssEmitter)";
+        this._userAgent = options.userAgent || "RssEmitter/v0.0.3 (https://github.com/kurozeropb/RssEmitter)";
         this._historyLengthMultiplier = 3;
         this._isFirst = true;
         this.options = options;
