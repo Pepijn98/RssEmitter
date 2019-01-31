@@ -63,7 +63,7 @@ export class FeedEmitter extends TinyEmitter {
         super();
 
         this._feedList = [];
-        this._userAgent = options.userAgent || "RssFeedEmitter (https://github.com/kurozeropb/RssFeedEmitter)";
+        this._userAgent = options.userAgent || "RssEmitter/v0.0.1 (https://github.com/kurozeropb/RssEmitter)";
         this._historyLengthMultiplier = 3;
     }
 

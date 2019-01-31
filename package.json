@@ -2,7 +2,11 @@
   "name": "rss-emitter-ts",
   "version": "0.0.1",
   "description": "Emit rss feed items, written in TypeScript",
-  "author": "Pepijn van den Broek <root@pepijn.tech>",
+  "author": {
+    "email": "root@pepijn.tech",
+    "name": "Pepijn van den Broek",
+    "url": "https://pepijn.tech"
+  },
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
   "files": [
@@ -10,6 +14,15 @@
   ],
   "license": "Apache-2.0",
   "keywords": [],
+  "homepage": "https://github.com/KurozeroPB/RssEmitter#readme",
+  "bugs": {
+    "email": "root@pepijn.tech",
+    "url": "https://github.com/KurozeroPB/RssEmitter/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KurozeroPB/RssEmitter.git"
+  },
   "scripts": {
     "test": "ts-node src/index.ts",
     "check": "gts check",
