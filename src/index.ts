@@ -1,26 +1,43 @@
 import TinyEmitter from "tiny-emitter";
 import _ from "lodash";
 import Axios, { AxiosResponse } from "axios";
-import FeedParser, { Item } from "feedparser";
+import FeedParser, { Item, Meta, Image } from "feedparser";
 import Bluebird from "bluebird";
 
 interface Options {
-    userAgent?: string
+    userAgent?: string;
 }
 
+export interface FeedItem extends Item {
+    title: string;
+    description: string;
+    summary: string;
+    date: Date | null;
+    pubdate: Date | null;
+    link: string;
+    origlink: string;
+    author: string;
+    guid: string;
+    comments: string;
+    image: Image;
+    categories: string[];
+    enclosures: string[];
+    meta: Meta;
+};
+
 export interface FeedData {
-    feedUrl: string
-    feed?: FeedConfig
-    items: Array<Item>
-    newItems?: Array<Item>
+    feedUrl: string;
+    feed?: FeedConfig;
+    items: Array<FeedItem>;
+    newItems?: Array<FeedItem>;
 }
 
 export interface FeedConfig {
-    url: string
-    maxHistoryLength?: number
-    setInterval?: NodeJS.Timeout
-    refresh?: number | 60000
-    items: Array<Item>
+    url: string;
+    maxHistoryLength?: number;
+    setInterval?: NodeJS.Timeout;
+    refresh?: number | 60000;
+    items: Array<FeedItem>;
 }
 
 export class FeedError extends Error {
@@ -95,7 +112,7 @@ export class FeedEmitter extends TinyEmitter {
         _.remove(this._feedList, { url: feed.url });
     }
 
-    _findItem(feed: FeedConfig, item: Item): Item | undefined {
+    _findItem(feed: FeedConfig, item: FeedItem): FeedItem | undefined {
         let object = {
             link: item.link,
             title: item.title,
@@ -134,7 +151,7 @@ export class FeedEmitter extends TinyEmitter {
                         return;
                     }
 
-                    self.emit("error", error);
+                    self.emit("feed:error", error);
                 });
 
 
@@ -167,7 +184,7 @@ export class FeedEmitter extends TinyEmitter {
             function identifyOnlyNewItems(data: FeedData) {
                 data.newItems = data.items.filter((fetchedItem) => {
 
-                    let foundItemInsideFeed: Item | undefined;
+                    let foundItemInsideFeed: FeedItem | undefined;
                     if (data.feed)
                         foundItemInsideFeed = self._findItem(data.feed, fetchedItem);
 
@@ -194,10 +211,10 @@ export class FeedEmitter extends TinyEmitter {
         return setInterval(getContent, feed.refresh || 60000);
     }
 
-    _addItemToItemList(feed: FeedConfig, item: Item) {
+    _addItemToItemList(feed: FeedConfig, item: FeedItem) {
         feed.items.push(item);
         feed.items = _.takeRight(feed.items, feed.maxHistoryLength);
-        this.emit("new-item", item);
+        this.emit("item:new", item);
     }
 
     _fetchFeed(feedUrl: string): Bluebird<FeedData> {
