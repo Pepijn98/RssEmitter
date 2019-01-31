@@ -19,22 +19,23 @@ export interface FeedItem extends Item {
     guid: string;
     comments: string;
     image: Image;
-    categories: string[];
-    enclosures: string[];
+    categories: Array<string>;
+    enclosures: Array<string>;
     meta: Meta;
-}
-export interface FeedData {
-    feedUrl: string;
-    feed?: FeedConfig;
-    items: Array<FeedItem>;
-    newItems?: Array<FeedItem>;
 }
 export interface FeedConfig {
     url: string;
+    ignoreFirst?: boolean;
     maxHistoryLength?: number;
     setInterval?: NodeJS.Timeout;
-    refresh?: number | 60000;
+    refresh?: number;
+    items?: Array<FeedItem>;
+}
+export interface FeedData {
+    feedUrl: string;
+    feed: FeedConfig;
     items: Array<FeedItem>;
+    newItems: Array<FeedItem>;
 }
 export declare class FeedError extends Error {
     type: string;
@@ -46,6 +47,8 @@ export declare class FeedEmitter extends TinyEmitter {
     _feedList: Array<FeedConfig>;
     _userAgent: string;
     _historyLengthMultiplier: number;
+    _isFirst: boolean;
+    options: Options;
     constructor(options?: Options);
     add(feedConfig: FeedConfig): Array<FeedConfig>;
     remove(url: string): void;
@@ -53,7 +56,7 @@ export declare class FeedEmitter extends TinyEmitter {
     destroy(): void;
     _addOrUpdateFeedList(feed: FeedConfig): void;
     _findFeed(feed: FeedConfig): FeedConfig | undefined;
-    _removeFromFeedList(feed: FeedConfig): void;
+    _removeFromFeedList(feed: FeedConfig | undefined): void;
     _findItem(feed: FeedConfig, item: FeedItem): FeedItem | undefined;
     _addToFeedList(feed: FeedConfig): void;
     _createSetInterval(feed: FeedConfig): NodeJS.Timeout;

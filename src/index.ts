@@ -20,24 +20,25 @@ export interface FeedItem extends Item {
     guid: string;
     comments: string;
     image: Image;
-    categories: string[];
-    enclosures: string[];
+    categories: Array<string>;
+    enclosures: Array<string>;
     meta: Meta;
 };
 
-export interface FeedData {
-    feedUrl: string;
-    feed?: FeedConfig;
-    items: Array<FeedItem>;
-    newItems?: Array<FeedItem>;
-}
-
 export interface FeedConfig {
     url: string;
+    ignoreFirst?: boolean;
     maxHistoryLength?: number;
     setInterval?: NodeJS.Timeout;
-    refresh?: number | 60000;
+    refresh?: number;
+    items?: Array<FeedItem>;
+}
+
+export interface FeedData {
+    feedUrl: string;
+    feed: FeedConfig;
     items: Array<FeedItem>;
+    newItems: Array<FeedItem>;
 }
 
 export class FeedError extends Error {
@@ -58,6 +59,8 @@ export class FeedEmitter extends TinyEmitter {
     _feedList: Array<FeedConfig>;
     _userAgent: string;
     _historyLengthMultiplier: number;
+    _isFirst: boolean;
+    options: Options;
 
     constructor(options: Options = {}) {
         super();
@@ -65,6 +68,8 @@ export class FeedEmitter extends TinyEmitter {
         this._feedList = [];
         this._userAgent = options.userAgent || "RssEmitter/v0.0.1 (https://github.com/kurozeropb/RssEmitter)";
         this._historyLengthMultiplier = 3;
+        this._isFirst = true;
+        this.options = options;
     }
 
     add(feedConfig: FeedConfig): Array<FeedConfig> {
@@ -74,7 +79,6 @@ export class FeedEmitter extends TinyEmitter {
 
     remove(url: string) {
         let feed = this._findFeed({ url, items: [] });
-        if (!feed) return;
         return this._removeFromFeedList(feed);
     }
 
@@ -105,7 +109,7 @@ export class FeedEmitter extends TinyEmitter {
         });
     }
 
-    _removeFromFeedList(feed: FeedConfig) {
+    _removeFromFeedList(feed: FeedConfig | undefined) {
         if (!feed || !feed.setInterval) return;
 
         clearInterval(feed.setInterval);
@@ -113,18 +117,14 @@ export class FeedEmitter extends TinyEmitter {
     }
 
     _findItem(feed: FeedConfig, item: FeedItem): FeedItem | undefined {
-        let object = {
-            link: item.link,
-            title: item.title,
-            guid: ""
-        };
+        let object = {} as any;
+        object.link = item.link;
+        object.title = item.title;
 
         if (item.guid) {
-            object = {
-                link: item.link,
-                title: item.title,
-                guid: item.guid
-            };
+            object.link = item.link;
+            object.title = item.title;
+            object.guid = item.guid;
         }
 
         return _.find(feed.items, object);
@@ -132,6 +132,7 @@ export class FeedEmitter extends TinyEmitter {
 
     _addToFeedList(feed: FeedConfig) {
         feed.items = [];
+        feed.refresh = feed.refresh ? feed.refresh : 60000;
         feed.setInterval = this._createSetInterval(feed);
         this._feedList.push(feed);
     }
@@ -170,9 +171,7 @@ export class FeedEmitter extends TinyEmitter {
 
             function redefineItemHistoryMaxLength(data: FeedData) {
                 let feedLength = data.items.length;
-                if (data.feed)
-                    data.feed.maxHistoryLength = feedLength * self._historyLengthMultiplier;
-
+                data.feed.maxHistoryLength = feedLength * self._historyLengthMultiplier;
             }
 
 
@@ -185,8 +184,7 @@ export class FeedEmitter extends TinyEmitter {
                 data.newItems = data.items.filter((fetchedItem) => {
 
                     let foundItemInsideFeed: FeedItem | undefined;
-                    if (data.feed)
-                        foundItemInsideFeed = self._findItem(data.feed, fetchedItem);
+                    foundItemInsideFeed = self._findItem(data.feed, fetchedItem);
 
                     if (foundItemInsideFeed) {
                         return false;
@@ -197,12 +195,11 @@ export class FeedEmitter extends TinyEmitter {
             }
 
             function populateNewItemsInFeed(data: FeedData) {
-                if (data.newItems) {
-                    data.newItems.forEach((item) => {
-                        if (!data.feed) return;
-                        self._addItemToItemList(data.feed, item);
-                    });
-                }
+                data.newItems.forEach((item) => {
+                    self._addItemToItemList(data.feed, item);
+                });
+
+                self._isFirst = false;
             }
         }
 
@@ -212,19 +209,23 @@ export class FeedEmitter extends TinyEmitter {
     }
 
     _addItemToItemList(feed: FeedConfig, item: FeedItem) {
-        feed.items.push(item);
-        feed.items = _.takeRight(feed.items, feed.maxHistoryLength);
-        this.emit("item:new", item);
+        if (this._isFirst && feed.ignoreFirst) {
+            feed.items!.push(item)
+            feed.items = _.takeRight(feed.items, feed.maxHistoryLength);
+        } else {
+            feed.items!.push(item)
+            feed.items = _.takeRight(feed.items, feed.maxHistoryLength);
+            this.emit("item:new", item);
+        }
     }
 
     _fetchFeed(feedUrl: string): Bluebird<FeedData> {
         return new Bluebird((reslove, reject) => {
             const feedparser = new FeedParser({});
 
-            let data: FeedData = {
-                feedUrl,
-                items: []
-            };
+            let data: FeedData = {} as any;
+            data.feedUrl = feedUrl;
+            data.items = [];
 
             Axios.get(feedUrl, {
                 responseType: "stream",
@@ -237,15 +238,18 @@ export class FeedEmitter extends TinyEmitter {
                     reject(new FeedError("fetch_url_error", `This URL returned a ${response.status} status code`, feedUrl));
                 }
 
-                return response.data.pipe(feedparser);
-            }).then(() => {
-                reslove(data);
+                const stream = response.data.pipe(feedparser);
+                stream.once("finish", () => {
+                    console.log(data.items.length);
+                    reslove(data);
+                });
             }).catch(() => {
                 reject(new FeedError("fetch_url_error", `Cannot connect to ${feedUrl}`, feedUrl));
             });
 
             feedparser.on("readable", () => {
-                const item = feedparser.read();
+                let item = feedparser.read();
+                if (!item) return;
                 item.meta.link = feedUrl;
                 data.items.push(item);
             });

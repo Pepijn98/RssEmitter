@@ -24,6 +24,8 @@ class FeedEmitter extends tiny_emitter_1.default {
         this._feedList = [];
         this._userAgent = options.userAgent || "RssEmitter/v0.0.1 (https://github.com/kurozeropb/RssEmitter)";
         this._historyLengthMultiplier = 3;
+        this._isFirst = true;
+        this.options = options;
     }
     add(feedConfig) {
         this._addOrUpdateFeedList(feedConfig);
@@ -31,8 +33,6 @@ class FeedEmitter extends tiny_emitter_1.default {
     }
     remove(url) {
         let feed = this._findFeed({ url, items: [] });
-        if (!feed)
-            return;
         return this._removeFromFeedList(feed);
     }
     list() {
@@ -63,22 +63,19 @@ class FeedEmitter extends tiny_emitter_1.default {
         lodash_1.default.remove(this._feedList, { url: feed.url });
     }
     _findItem(feed, item) {
-        let object = {
-            link: item.link,
-            title: item.title,
-            guid: ""
-        };
+        let object = {};
+        object.link = item.link;
+        object.title = item.title;
         if (item.guid) {
-            object = {
-                link: item.link,
-                title: item.title,
-                guid: item.guid
-            };
+            object.link = item.link;
+            object.title = item.title;
+            object.guid = item.guid;
         }
         return lodash_1.default.find(feed.items, object);
     }
     _addToFeedList(feed) {
         feed.items = [];
+        feed.refresh = feed.refresh ? feed.refresh : 60000;
         feed.setInterval = this._createSetInterval(feed);
         this._feedList.push(feed);
     }
@@ -109,8 +106,7 @@ class FeedEmitter extends tiny_emitter_1.default {
             }
             function redefineItemHistoryMaxLength(data) {
                 let feedLength = data.items.length;
-                if (data.feed)
-                    data.feed.maxHistoryLength = feedLength * self._historyLengthMultiplier;
+                data.feed.maxHistoryLength = feedLength * self._historyLengthMultiplier;
             }
             function sortItemsByDate(data) {
                 data.items = lodash_1.default.sortBy(data.items, "date");
@@ -118,8 +114,7 @@ class FeedEmitter extends tiny_emitter_1.default {
             function identifyOnlyNewItems(data) {
                 data.newItems = data.items.filter((fetchedItem) => {
                     let foundItemInsideFeed;
-                    if (data.feed)
-                        foundItemInsideFeed = self._findItem(data.feed, fetchedItem);
+                    foundItemInsideFeed = self._findItem(data.feed, fetchedItem);
                     if (foundItemInsideFeed) {
                         return false;
                     }
@@ -127,30 +122,32 @@ class FeedEmitter extends tiny_emitter_1.default {
                 });
             }
             function populateNewItemsInFeed(data) {
-                if (data.newItems) {
-                    data.newItems.forEach((item) => {
-                        if (!data.feed)
-                            return;
-                        self._addItemToItemList(data.feed, item);
-                    });
-                }
+                data.newItems.forEach((item) => {
+                    self._addItemToItemList(data.feed, item);
+                });
+                self._isFirst = false;
             }
         }
         getContent();
         return setInterval(getContent, feed.refresh || 60000);
     }
     _addItemToItemList(feed, item) {
-        feed.items.push(item);
-        feed.items = lodash_1.default.takeRight(feed.items, feed.maxHistoryLength);
-        this.emit("item:new", item);
+        if (this._isFirst && feed.ignoreFirst) {
+            feed.items.push(item);
+            feed.items = lodash_1.default.takeRight(feed.items, feed.maxHistoryLength);
+        }
+        else {
+            feed.items.push(item);
+            feed.items = lodash_1.default.takeRight(feed.items, feed.maxHistoryLength);
+            this.emit("item:new", item);
+        }
     }
     _fetchFeed(feedUrl) {
         return new bluebird_1.default((reslove, reject) => {
             const feedparser = new feedparser_1.default({});
-            let data = {
-                feedUrl,
-                items: []
-            };
+            let data = {};
+            data.feedUrl = feedUrl;
+            data.items = [];
             axios_1.default.get(feedUrl, {
                 responseType: "stream",
                 headers: {
@@ -161,14 +158,18 @@ class FeedEmitter extends tiny_emitter_1.default {
                 if (response.status !== 200) {
                     reject(new FeedError("fetch_url_error", `This URL returned a ${response.status} status code`, feedUrl));
                 }
-                return response.data.pipe(feedparser);
-            }).then(() => {
-                reslove(data);
+                const stream = response.data.pipe(feedparser);
+                stream.once("finish", () => {
+                    console.log(data.items.length);
+                    reslove(data);
+                });
             }).catch(() => {
                 reject(new FeedError("fetch_url_error", `Cannot connect to ${feedUrl}`, feedUrl));
             });
             feedparser.on("readable", () => {
-                const item = feedparser.read();
+                let item = feedparser.read();
+                if (!item)
+                    return;
                 item.meta.link = feedUrl;
                 data.items.push(item);
             });

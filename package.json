@@ -13,7 +13,18 @@
     "build/src"
   ],
   "license": "Apache-2.0",
-  "keywords": [],
+  "keywords": [
+    "rss",
+    "feed",
+    "news",
+    "xml",
+    "atom",
+    "rss feed",
+    "emitter",
+    "rss emitter",
+    "feed emitter",
+    "reader"
+  ],
   "homepage": "https://github.com/KurozeroPB/RssEmitter#readme",
   "bugs": {
     "email": "root@pepijn.tech",
@@ -38,10 +49,12 @@
     "@types/feedparser": "^2.2.1",
     "@types/lodash": "^4.14.120",
     "@types/node": "^10.12.19",
+    "@types/request": "^2.48.1",
     "axios": "^0.18.0",
     "bluebird": "^3.5.3",
     "feedparser": "^2.2.9",
     "lodash": "^4.17.11",
+    "request": "^2.88.0",
     "tiny-emitter": "^2.0.2"
   },
   "devDependencies": {
