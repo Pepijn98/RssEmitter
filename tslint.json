@@ -1,0 +1,6 @@
+{
+  "extends": "gts/tslint.json",
+  "rules": {
+    "quotemark": [true, "double", "avoid-escape", "avoid-template"]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "extends": "./node_modules/gts/tsconfig-google.json",
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "esModuleInterop": true,
+    "rootDir": ".",
+    "outDir": "build",
+    "types": [
+      "@types/bluebird",
+      "@types/feedparser",
+      "@types/lodash",
+      "@types/node"
+    ]
+  },
+  "include": [
+    "src/*.ts",
+    "src/**/*.ts",
+    "test/*.ts",
+    "test/**/*.ts",
+    "index.d.ts"
+  ]
+}
