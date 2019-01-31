@@ -11,7 +11,7 @@ const emitter = new RssFeedEmitter();
 emitter.add({
     url: "https://hnrss.org/frontpage",
     refresh: 20000,
-    items: []
+    ignoreFirst: true // Ignores the all the items when initializing and fetching the items for the first time
 });
 
 emitter.on("item:new", (item: FeedItem) => {
