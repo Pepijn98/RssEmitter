@@ -19,31 +19,57 @@ class FeedError extends Error {
 }
 exports.FeedError = FeedError;
 class FeedEmitter extends tiny_emitter_1.default {
+    /**
+     * Initialize the rss feed emitter
+     *
+     * @param {Options} options
+     */
     constructor(options = {}) {
         super();
         this._feedList = [];
-        this._userAgent = options.userAgent || "RssEmitter/v0.0.4 (https://github.com/kurozeropb/RssEmitter)";
+        this._userAgent = options.userAgent || "RssEmitter/v0.0.5 (https://github.com/kurozeropb/RssEmitter)";
         this._historyLengthMultiplier = 3;
         this._isFirst = true;
         this.options = options;
     }
+    /**
+     * Add a new feed to the feed list
+     *
+     * @param {FeedConfig} feedConfig
+     *
+     * @returns {Array<FeedConfig>}
+     */
     add(feedConfig) {
         this._addOrUpdateFeedList(feedConfig);
         return this._feedList;
     }
+    /**
+     * Remove a feed from the feed list
+     *
+     * @param {string} url
+     */
     remove(url) {
-        let feed = this._findFeed({ url, items: [] });
+        let feed = this._findFeed({ url });
         return this._removeFromFeedList(feed);
     }
+    /**
+     * List all feeds
+     *
+     * @returns {Array<FeedConfig>}
+     */
     list() {
         return this._feedList;
     }
+    /**
+     * Remove all feeds
+     */
     destroy() {
         for (let i = this._feedList.length - 1; i >= 0; i--) {
             let feed = this._feedList[i];
             this._removeFromFeedList(feed);
         }
     }
+    /** @hidden */
     _addOrUpdateFeedList(feed) {
         let feedInList = this._findFeed(feed);
         if (feedInList) {
@@ -51,17 +77,20 @@ class FeedEmitter extends tiny_emitter_1.default {
         }
         return this._addToFeedList(feed);
     }
+    /** @hidden */
     _findFeed(feed) {
         return lodash_1.default.find(this._feedList, {
             url: feed.url
         });
     }
+    /** @hidden */
     _removeFromFeedList(feed) {
         if (!feed || !feed.setInterval)
             return;
         clearInterval(feed.setInterval);
         lodash_1.default.remove(this._feedList, { url: feed.url });
     }
+    /** @hidden */
     _findItem(feed, item) {
         let object = {};
         object.link = item.link;
@@ -73,12 +102,14 @@ class FeedEmitter extends tiny_emitter_1.default {
         }
         return lodash_1.default.find(feed.items, object);
     }
+    /** @hidden */
     _addToFeedList(feed) {
         feed.items = [];
         feed.refresh = feed.refresh ? feed.refresh : 60000;
         feed.setInterval = this._createSetInterval(feed);
         this._feedList.push(feed);
     }
+    /** @hidden */
     _createSetInterval(feed) {
         let self = this;
         function getContent() {
@@ -95,7 +126,7 @@ class FeedEmitter extends tiny_emitter_1.default {
                 self.emit("feed:error", error);
             });
             function findFeed(data) {
-                let foundFeed = self._findFeed({ url: data.feedUrl, items: [] });
+                let foundFeed = self._findFeed({ url: data.feedUrl });
                 if (!foundFeed) {
                     throw {
                         type: "feed_not_found",
@@ -129,8 +160,9 @@ class FeedEmitter extends tiny_emitter_1.default {
             }
         }
         getContent();
-        return setInterval(getContent, feed.refresh || 60000);
+        return setInterval(getContent, feed.refresh);
     }
+    /** @hidden */
     _addItemToItemList(feed, item) {
         if (this._isFirst && feed.ignoreFirst) {
             feed.items.push(item);
@@ -142,6 +174,7 @@ class FeedEmitter extends tiny_emitter_1.default {
             this.emit("item:new", item);
         }
     }
+    /** @hidden */
     _fetchFeed(feedUrl) {
         return new bluebird_1.default((reslove, reject) => {
             const feedparser = new feedparser_1.default({});
