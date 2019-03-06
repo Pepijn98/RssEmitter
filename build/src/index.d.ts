@@ -1,7 +1,7 @@
 /// <reference types="@types/feedparser" />
-/// <reference types="@types/node" />
+/// <reference types="node" />
 /// <reference types="@types/bluebird" />
-import TinyEmitter from "tiny-emitter";
+import { TinyEmitter } from "tiny-emitter";
 import { Item, Meta, Image } from "feedparser";
 import Bluebird from "bluebird";
 interface Options {

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const tiny_emitter_1 = __importDefault(require("tiny-emitter"));
+const tiny_emitter_1 = require("tiny-emitter");
 const lodash_1 = __importDefault(require("lodash"));
 const axios_1 = __importDefault(require("axios"));
 const feedparser_1 = __importDefault(require("feedparser"));
@@ -18,7 +18,7 @@ class FeedError extends Error {
     }
 }
 exports.FeedError = FeedError;
-class FeedEmitter extends tiny_emitter_1.default {
+class FeedEmitter extends tiny_emitter_1.TinyEmitter {
     /**
      * Initialize the rss feed emitter
      *

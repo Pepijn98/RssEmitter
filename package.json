@@ -1,6 +1,6 @@
 {
   "name": "rss-emitter-ts",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "Emit rss feed items, written in TypeScript",
   "author": {
     "email": "root@pepijn.tech",
@@ -57,7 +57,7 @@
     "feedparser": "^2.2.9",
     "lodash": "^4.17.11",
     "request": "^2.88.0",
-    "tiny-emitter": "^2.0.2"
+    "tiny-emitter": "^2.1.0"
   },
   "devDependencies": {
     "gts": "^0.9.0",
