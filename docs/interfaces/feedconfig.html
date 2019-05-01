@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>FeedData | rss-emitter-ts</title>
+	<title>FeedConfig | RssEmitter</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">rss-emitter-ts</a>
+					<a href="../index.html" class="title">RssEmitter</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -38,10 +38,6 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-							<input type="checkbox" id="tsd-filter-only-exported" />
-							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -56,13 +52,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_index_.html">&quot;index&quot;</a>
-				</li>
-				<li>
-					<a href="_index_.feeddata.html">FeedData</a>
+					<a href="feedconfig.html">FeedConfig</a>
 				</li>
 			</ul>
-			<h1>Interface FeedData</h1>
+			<h1>Interface FeedConfig</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +66,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">FeedData</span>
+						<span class="target">FeedConfig</span>
 					</li>
 				</ul>
 			</section>
@@ -84,10 +77,12 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_index_.feeddata.html#feed" class="tsd-kind-icon">feed</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_index_.feeddata.html#feedurl" class="tsd-kind-icon">feed<wbr>Url</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_index_.feeddata.html#items" class="tsd-kind-icon">items</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_index_.feeddata.html#newitems" class="tsd-kind-icon">new<wbr>Items</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="feedconfig.html#ignorefirst" class="tsd-kind-icon">ignore<wbr>First</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="feedconfig.html#items" class="tsd-kind-icon">items</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="feedconfig.html#maxhistorylength" class="tsd-kind-icon">max<wbr>History<wbr>Length</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="feedconfig.html#refresh" class="tsd-kind-icon">refresh</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="feedconfig.html#setinterval" class="tsd-kind-icon">set<wbr>Interval</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="feedconfig.html#url" class="tsd-kind-icon">url</a></li>
 							</ul>
 						</section>
 					</div>
@@ -96,42 +91,62 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="feed" class="tsd-anchor"></a>
-					<h3>feed</h3>
-					<div class="tsd-signature tsd-kind-icon">feed<span class="tsd-signature-symbol">:</span> <a href="_index_.feedconfig.html" class="tsd-signature-type">FeedConfig</a></div>
+					<a name="ignorefirst" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> ignore<wbr>First</h3>
+					<div class="tsd-signature tsd-kind-icon">ignore<wbr>First<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/KurozeroPB/RssEmitter/blob/b787b77/src/index.ts#L39">index.ts:39</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="feedurl" class="tsd-anchor"></a>
-					<h3>feed<wbr>Url</h3>
-					<div class="tsd-signature tsd-kind-icon">feed<wbr>Url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/KurozeroPB/RssEmitter/blob/b787b77/src/index.ts#L38">index.ts:38</a></li>
+							<li>Defined in index.ts:32</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="items" class="tsd-anchor"></a>
-					<h3>items</h3>
-					<div class="tsd-signature tsd-kind-icon">items<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="_index_.feeditem.html" class="tsd-signature-type">FeedItem</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> items</h3>
+					<div class="tsd-signature tsd-kind-icon">items<span class="tsd-signature-symbol">:</span> <a href="feeditem.html" class="tsd-signature-type">FeedItem</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/KurozeroPB/RssEmitter/blob/b787b77/src/index.ts#L40">index.ts:40</a></li>
+							<li>Defined in index.ts:36</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="newitems" class="tsd-anchor"></a>
-					<h3>new<wbr>Items</h3>
-					<div class="tsd-signature tsd-kind-icon">new<wbr>Items<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="_index_.feeditem.html" class="tsd-signature-type">FeedItem</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="maxhistorylength" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> max<wbr>History<wbr>Length</h3>
+					<div class="tsd-signature tsd-kind-icon">max<wbr>History<wbr>Length<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/KurozeroPB/RssEmitter/blob/b787b77/src/index.ts#L41">index.ts:41</a></li>
+							<li>Defined in index.ts:33</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="refresh" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> refresh</h3>
+					<div class="tsd-signature tsd-kind-icon">refresh<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in index.ts:35</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="setinterval" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> set<wbr>Interval</h3>
+					<div class="tsd-signature tsd-kind-icon">set<wbr>Interval<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">NodeJS.Timeout</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in index.ts:34</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="url" class="tsd-anchor"></a>
+					<h3>url</h3>
+					<div class="tsd-signature tsd-kind-icon">url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in index.ts:31</li>
 						</ul>
 					</aside>
 				</section>
@@ -143,51 +158,48 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="current tsd-kind-external-module">
-						<a href="../modules/_index_.html">"index"</a>
-					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/_index_.feedemitter.html" class="tsd-kind-icon">Feed<wbr>Emitter</a>
+					<li class=" tsd-kind-class">
+						<a href="../classes/feedemitter.html" class="tsd-kind-icon">Feed<wbr>Emitter</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/_index_.feederror.html" class="tsd-kind-icon">Feed<wbr>Error</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_index_.feedconfig.html" class="tsd-kind-icon">Feed<wbr>Config</a>
+					<li class=" tsd-kind-class">
+						<a href="../classes/feederror.html" class="tsd-kind-icon">Feed<wbr>Error</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_index_.feeddata.html" class="tsd-kind-icon">Feed<wbr>Data</a>
+					<li class="current tsd-kind-interface">
+						<a href="feedconfig.html" class="tsd-kind-icon">Feed<wbr>Config</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_index_.feeddata.html#feed" class="tsd-kind-icon">feed</a>
+								<a href="feedconfig.html#ignorefirst" class="tsd-kind-icon">ignore<wbr>First</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_index_.feeddata.html#feedurl" class="tsd-kind-icon">feed<wbr>Url</a>
+								<a href="feedconfig.html#items" class="tsd-kind-icon">items</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_index_.feeddata.html#items" class="tsd-kind-icon">items</a>
+								<a href="feedconfig.html#maxhistorylength" class="tsd-kind-icon">max<wbr>History<wbr>Length</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_index_.feeddata.html#newitems" class="tsd-kind-icon">new<wbr>Items</a>
+								<a href="feedconfig.html#refresh" class="tsd-kind-icon">refresh</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="feedconfig.html#setinterval" class="tsd-kind-icon">set<wbr>Interval</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="feedconfig.html#url" class="tsd-kind-icon">url</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_index_.feeditem.html" class="tsd-kind-icon">Feed<wbr>Item</a>
+					<li class=" tsd-kind-interface">
+						<a href="feeddata.html" class="tsd-kind-icon">Feed<wbr>Data</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_index_.options.html" class="tsd-kind-icon">Options</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
-						<a href="../modules/_index_.html#rssfeedemitter" class="tsd-kind-icon">Rss<wbr>Feed<wbr>Emitter</a>
+					<li class=" tsd-kind-interface">
+						<a href="feeditem.html" class="tsd-kind-icon">Feed<wbr>Item</a>
 					</li>
 				</ul>
 			</nav>

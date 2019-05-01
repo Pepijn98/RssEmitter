@@ -1,17 +1,13 @@
 {
     "name": "rss-emitter-ts",
-    "version": "0.1.1",
+    "version": "0.1.5",
     "description": "Emit rss feed items, written in TypeScript",
     "author": {
         "email": "root@kurozeropb.info",
         "name": "Pepijn van den Broek",
         "url": "https://kurozeropb.info"
     },
-    "main": "build/src/index.js",
-    "types": "build/src/index.d.ts",
-    "files": [
-        "build/src"
-    ],
+    "main": "dist/lib/index.js",
     "license": "Apache-2.0",
     "keywords": [
         "rss",
@@ -27,7 +23,7 @@
     ],
     "homepage": "https://kurozeropb.info/rss-emitter/docs",
     "bugs": {
-        "email": "root@kurozeropb.info",
+        "email": "bugs@kurozeropb.info",
         "url": "https://github.com/KurozeroPB/RssEmitter/issues"
     },
     "repository": {
@@ -35,15 +31,14 @@
         "url": "https://github.com/KurozeroPB/RssEmitter.git"
     },
     "scripts": {
+        "publish": "npm publish",
         "test": "ts-node src/index.ts",
         "check": "gts check",
         "clean": "gts clean",
         "compile": "yarn clean && tsc -p .",
         "fix": "gts fix",
         "prepare": "yarn compile",
-        "pretest": "yarn compile",
-        "posttest": "yarn check",
-        "docs": "typedoc --out ./docs ./src --readme ./README.md",
+        "docs": "typedoc && cp .nojekyll docs/",
         "generate": "yarn compile && yarn docs"
     },
     "dependencies": {
