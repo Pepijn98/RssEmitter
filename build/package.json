@@ -1,0 +1,66 @@
+{
+    "name": "rss-emitter-ts",
+    "version": "0.1.1",
+    "description": "Emit rss feed items, written in TypeScript",
+    "author": {
+        "email": "root@pepijn.tech",
+        "name": "Pepijn van den Broek",
+        "url": "https://pepijn.tech"
+    },
+    "main": "build/src/index.js",
+    "types": "build/src/index.d.ts",
+    "files": [
+        "build/src"
+    ],
+    "license": "Apache-2.0",
+    "keywords": [
+        "rss",
+        "feed",
+        "news",
+        "xml",
+        "atom",
+        "rss feed",
+        "emitter",
+        "rss emitter",
+        "feed emitter",
+        "reader"
+    ],
+    "homepage": "https://kurozeropb.info/rss-emitter/docs",
+    "bugs": {
+        "email": "root@pepijn.tech",
+        "url": "https://github.com/KurozeroPB/RssEmitter/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/KurozeroPB/RssEmitter.git"
+    },
+    "scripts": {
+        "test": "ts-node src/index.ts",
+        "check": "gts check",
+        "clean": "gts clean",
+        "compile": "tsc -p .",
+        "fix": "gts fix",
+        "prepare": "yarn compile",
+        "pretest": "yarn compile",
+        "posttest": "yarn check",
+        "docs": "typedoc --out ./docs ./src --readme ./README.md",
+        "generate": "yarn compile && yarn docs"
+    },
+    "dependencies": {
+        "@types/bluebird": "^3.5.25",
+        "@types/feedparser": "^2.2.1",
+        "@types/lodash": "^4.14.120",
+        "@types/node": "^10.12.27",
+        "@types/request": "^2.48.1",
+        "axios": "^0.18.0",
+        "bluebird": "^3.5.3",
+        "feedparser": "^2.2.9",
+        "lodash": "^4.17.11",
+        "request": "^2.88.0",
+        "tiny-emitter": "^2.1.0"
+    },
+    "devDependencies": {
+        "gts": "^0.9.0",
+        "typescript": "^3.2.4"
+    }
+}

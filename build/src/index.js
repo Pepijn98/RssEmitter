@@ -3,11 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const tiny_emitter_1 = require("tiny-emitter");
 const lodash_1 = __importDefault(require("lodash"));
+const bluebird_1 = __importDefault(require("bluebird"));
 const axios_1 = __importDefault(require("axios"));
 const feedparser_1 = __importDefault(require("feedparser"));
-const bluebird_1 = __importDefault(require("bluebird"));
+const package_json_1 = require("../package.json");
+const tiny_emitter_1 = require("tiny-emitter");
 ;
 class FeedError extends Error {
     constructor(type, message, feed) {
@@ -21,22 +22,18 @@ exports.FeedError = FeedError;
 class FeedEmitter extends tiny_emitter_1.TinyEmitter {
     /**
      * Initialize the rss feed emitter
-     *
      * @param {Options} options
      */
     constructor(options = {}) {
         super();
         this._feedList = [];
-        this._userAgent = options.userAgent || "RssEmitter/v0.1.0 (https://github.com/kurozeropb/RssEmitter)";
+        this._userAgent = options.userAgent || `RssEmitter/v${package_json_1.version} (https://github.com/kurozeropb/RssEmitter)`;
         this._historyLengthMultiplier = 3;
         this._isFirst = true;
-        this.options = options;
     }
     /**
      * Add a new feed to the feed list
-     *
      * @param {FeedConfig} feedConfig
-     *
      * @returns {Array<FeedConfig>}
      */
     add(feedConfig) {
@@ -45,7 +42,6 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
     }
     /**
      * Remove a feed from the feed list
-     *
      * @param {string} url
      */
     remove(url) {
@@ -54,15 +50,12 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
     }
     /**
      * List all feeds
-     *
      * @returns {Array<FeedConfig>}
      */
     list() {
         return this._feedList;
     }
-    /**
-     * Remove all feeds
-     */
+    /** Remove all feeds */
     destroy() {
         for (let i = this._feedList.length - 1; i >= 0; i--) {
             let feed = this._feedList[i];
@@ -212,4 +205,3 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
 exports.FeedEmitter = FeedEmitter;
 const RssFeedEmitter = FeedEmitter;
 exports.default = RssFeedEmitter;
-//# sourceMappingURL=index.js.map
