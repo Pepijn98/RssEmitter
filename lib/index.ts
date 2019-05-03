@@ -4,7 +4,7 @@ import FeedParser, { Item, Meta, Image } from "feedparser";
 import { version } from "../package.json";
 import { TinyEmitter } from "tiny-emitter";
 
-interface Options {
+export interface Options {
     userAgent?: string;
 }
 

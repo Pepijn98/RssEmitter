@@ -2,7 +2,7 @@
 /// <reference types="node" />
 import { Item, Meta, Image } from "feedparser";
 import { TinyEmitter } from "tiny-emitter";
-interface Options {
+export interface Options {
     userAgent?: string;
 }
 export interface FeedItem extends Item {
