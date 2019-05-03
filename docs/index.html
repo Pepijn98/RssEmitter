@@ -78,47 +78,48 @@
 				<h1 id="example">Example</h1>
 				<pre><code class="language-ts"><span class="hljs-comment">// TypeScript</span>
 
-<span class="hljs-keyword">import</span> RssFeedEmitter, {
+<span class="hljs-keyword">import</span> {
+    FeedEmitter,
     FeedItem,
     FeedConfig,
     FeedError
 } <span class="hljs-keyword">from</span> <span class="hljs-string">"rss-emitter-ts"</span>;
 
-<span class="hljs-keyword">const</span> rss = <span class="hljs-keyword">new</span> RssFeedEmitter();
+<span class="hljs-keyword">const</span> emitter = <span class="hljs-keyword">new</span> FeedEmitter();
 
 <span class="hljs-comment">// Add a new feed</span>
-rss.add({ url: <span class="hljs-string">"https://hnrss.org/frontpage"</span>, refresh: <span class="hljs-number">20000</span>, ignoreFirst: <span class="hljs-literal">true</span> });
+emitter.add({ url: <span class="hljs-string">"https://hnrss.org/frontpage"</span>, refresh: <span class="hljs-number">20000</span>, ignoreFirst: <span class="hljs-literal">true</span> });
 
 <span class="hljs-comment">// Listen to the emitted events</span>
-rss.on(<span class="hljs-string">"item:new"</span>, <span class="hljs-function">(<span class="hljs-params">item: FeedItem</span>) =&gt;</span> {
+emitter.on(<span class="hljs-string">"item:new"</span>, <span class="hljs-function">(<span class="hljs-params">item: FeedItem</span>) =&gt;</span> {
     <span class="hljs-keyword">const</span> message = <span class="hljs-string">`New item:\n<span class="hljs-subst">${item.title}</span>\n<span class="hljs-subst">${item.description}</span>`</span>;
     <span class="hljs-built_in">console</span>.log(message);
 });
 
-rss.on(<span class="hljs-string">"feed:error"</span>, <span class="hljs-function">(<span class="hljs-params">error: FeedError</span>) =&gt;</span> {
+emitter.on(<span class="hljs-string">"feed:error"</span>, <span class="hljs-function">(<span class="hljs-params">error: FeedError</span>) =&gt;</span> {
     <span class="hljs-keyword">const</span> errorMsg = <span class="hljs-string">`Type: <span class="hljs-subst">${error.type}</span>\nFeed: <span class="hljs-subst">${error.feed}</span>\nMessage: <span class="hljs-subst">${error.message}</span>`</span>;
     <span class="hljs-built_in">console</span>.error(errorMsg);
 });
 
 <span class="hljs-comment">// List all feeds</span>
-<span class="hljs-keyword">const</span> allFeeds = rss.list();
+<span class="hljs-keyword">const</span> allFeeds = emitter.list();
 <span class="hljs-keyword">const</span> feeds = allFeeds.map(<span class="hljs-function">(<span class="hljs-params">feed: FeedConfig</span>) =&gt;</span> feed.url).join(<span class="hljs-string">"\n"</span>);
 <span class="hljs-built_in">console</span>.log(feeds);</code></pre>
 				<pre><code class="language-js"><span class="hljs-comment">// JavaScript</span>
 
-<span class="hljs-keyword">const</span> Rss = <span class="hljs-built_in">require</span>(<span class="hljs-string">"rss-emitter-ts"</span>);
-<span class="hljs-keyword">const</span> rss = <span class="hljs-keyword">new</span> Rss.FeedEmitter();
+<span class="hljs-keyword">const</span> { FeedEmitter } = <span class="hljs-built_in">require</span>(<span class="hljs-string">"rss-emitter-ts"</span>);
+<span class="hljs-keyword">const</span> emitter = <span class="hljs-keyword">new</span> FeedEmitter();
 
-rss.add({ <span class="hljs-attr">url</span>: <span class="hljs-string">"https://hnrss.org/frontpage"</span>, <span class="hljs-attr">refresh</span>: <span class="hljs-number">20000</span>, <span class="hljs-attr">ignoreFirst</span>: <span class="hljs-literal">true</span> });
+emitter.add({ <span class="hljs-attr">url</span>: <span class="hljs-string">"https://hnrss.org/frontpage"</span>, <span class="hljs-attr">refresh</span>: <span class="hljs-number">20000</span>, <span class="hljs-attr">ignoreFirst</span>: <span class="hljs-literal">true</span> });
 
-rss.on(<span class="hljs-string">"item:new"</span>, (item) =&gt; <span class="hljs-built_in">console</span>.log(item.title));
-rss.on(<span class="hljs-string">"feed:error"</span>, (error) =&gt; <span class="hljs-built_in">console</span>.error(error.message));
+emitter.on(<span class="hljs-string">"item:new"</span>, (item) =&gt; <span class="hljs-built_in">console</span>.log(item.title));
+emitter.on(<span class="hljs-string">"feed:error"</span>, (error) =&gt; <span class="hljs-built_in">console</span>.error(error.message));
 
-<span class="hljs-keyword">const</span> allFeeds = rss.list();
+<span class="hljs-keyword">const</span> allFeeds = emitter.list();
 <span class="hljs-keyword">const</span> feeds = allFeeds.map(<span class="hljs-function">(<span class="hljs-params">feed</span>) =&gt;</span> feed.url).join(<span class="hljs-string">"\n"</span>);
 <span class="hljs-built_in">console</span>.log(feeds);</code></pre>
 				<h1 id="docs">Docs</h1>
-				<p><a href="https://kurozeropb.info/rss-emitter/docs">https://kurozeropb.info/rss-emitter/docs</a></p>
+				<p><a href="https://kurozeropb.github.io/RssEmitter/">https://kurozeropb.github.io/RssEmitter/</a></p>
 				<table>
 					<thead>
 						<tr>
