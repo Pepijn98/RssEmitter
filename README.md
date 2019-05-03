@@ -19,30 +19,31 @@ Emit rss feed items, written in TypeScript
 ```ts
 // TypeScript
 
-import RssFeedEmitter, {
+import {
+    FeedEmitter,
     FeedItem,
     FeedConfig,
     FeedError
 } from "rss-emitter-ts";
 
-const rss = new RssFeedEmitter();
+const emitter = new FeedEmitter();
 
 // Add a new feed
-rss.add({ url: "https://hnrss.org/frontpage", refresh: 20000, ignoreFirst: true });
+emitter.add({ url: "https://hnrss.org/frontpage", refresh: 20000, ignoreFirst: true });
 
 // Listen to the emitted events
-rss.on("item:new", (item: FeedItem) => {
+emitter.on("item:new", (item: FeedItem) => {
     const message = `New item:\n${item.title}\n${item.description}`;
     console.log(message);
 });
 
-rss.on("feed:error", (error: FeedError) => {
+emitter.on("feed:error", (error: FeedError) => {
     const errorMsg = `Type: ${error.type}\nFeed: ${error.feed}\nMessage: ${error.message}`;
     console.error(errorMsg);
 });
 
 // List all feeds
-const allFeeds = rss.list();
+const allFeeds = emitter.list();
 const feeds = allFeeds.map((feed: FeedConfig) => feed.url).join("\n");
 console.log(feeds);
 ```
@@ -50,15 +51,15 @@ console.log(feeds);
 ```js
 // JavaScript
 
-const Rss = require("rss-emitter-ts");
-const rss = new Rss.FeedEmitter();
+const { FeedEmitter } = require("rss-emitter-ts");
+const emitter = new FeedEmitter();
 
-rss.add({ url: "https://hnrss.org/frontpage", refresh: 20000, ignoreFirst: true });
+emitter.add({ url: "https://hnrss.org/frontpage", refresh: 20000, ignoreFirst: true });
 
-rss.on("item:new", (item) => console.log(item.title));
-rss.on("feed:error", (error) => console.error(error.message));
+emitter.on("item:new", (item) => console.log(item.title));
+emitter.on("feed:error", (error) => console.error(error.message));
 
-const allFeeds = rss.list();
+const allFeeds = emitter.list();
 const feeds = allFeeds.map((feed) => feed.url).join("\n");
 console.log(feeds);
 ```
