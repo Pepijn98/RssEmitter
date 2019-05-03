@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const lodash_1 = __importDefault(require("lodash"));
 const bluebird_1 = __importDefault(require("bluebird"));
 const axios_1 = __importDefault(require("axios"));
 const feedparser_1 = __importDefault(require("feedparser"));
@@ -15,7 +14,7 @@ class FeedError extends Error {
         super();
         this.type = type;
         this.message = message;
-        this.feed = feed;
+        this.feed = feed ? feed : "";
     }
 }
 exports.FeedError = FeedError;
@@ -72,28 +71,28 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
     }
     /** @hidden */
     _findFeed(feed) {
-        return lodash_1.default.find(this._feedList, {
-            url: feed.url
-        });
+        return this._feedList.find((x) => x.url === feed.url);
     }
     /** @hidden */
     _removeFromFeedList(feed) {
         if (!feed || !feed.setInterval)
             return;
         clearInterval(feed.setInterval);
-        lodash_1.default.remove(this._feedList, { url: feed.url });
+        for (let i = 0; i < this._feedList.length; i++) {
+            if (this._feedList[i].url === feed.url) {
+                this._feedList.splice(i, 1);
+                i--;
+            }
+        }
     }
     /** @hidden */
     _findItem(feed, item) {
-        let object = {};
-        object.link = item.link;
-        object.title = item.title;
+        if (!feed.items)
+            return void 0;
         if (item.guid) {
-            object.link = item.link;
-            object.title = item.title;
-            object.guid = item.guid;
+            return feed.items.find((x) => x.link === item.link && x.title === item.title && x.guid === item.guid);
         }
-        return lodash_1.default.find(feed.items, object);
+        return feed.items.find((x) => x.link === item.link && x.title === item.title);
     }
     /** @hidden */
     _addToFeedList(feed) {
@@ -104,8 +103,36 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
     }
     /** @hidden */
     _createSetInterval(feed) {
-        let self = this;
+        const self = this;
         function getContent() {
+            function findFeed(data) {
+                let foundFeed = self._findFeed({ url: data.feedUrl });
+                if (!foundFeed) {
+                    throw new FeedError("feed_not_found", "Feed not found.");
+                }
+                data.feed = foundFeed;
+            }
+            function redefineItemHistoryMaxLength(data) {
+                let feedLength = data.items.length;
+                data.feed.maxHistoryLength = feedLength * self._historyLengthMultiplier;
+            }
+            function sortItemsByDate(data) {
+                // @ts-ignore
+                data.items = data.items.sort((a, b) => b.date - a.date);
+            }
+            function identifyOnlyNewItems(data) {
+                data.newItems = data.items.filter((fetchedItem) => {
+                    const foundItemInsideFeed = self._findItem(data.feed, fetchedItem);
+                    if (foundItemInsideFeed) {
+                        return false;
+                    }
+                    return fetchedItem;
+                });
+            }
+            function populateNewItemsInFeed(data) {
+                data.newItems.forEach((item) => self._addItemToItemList(data.feed, item));
+                self._isFirst = false;
+            }
             self._fetchFeed(feed.url)
                 .tap(findFeed)
                 .tap(redefineItemHistoryMaxLength)
@@ -118,39 +145,6 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
                 }
                 self.emit("feed:error", error);
             });
-            function findFeed(data) {
-                let foundFeed = self._findFeed({ url: data.feedUrl });
-                if (!foundFeed) {
-                    throw {
-                        type: "feed_not_found",
-                        message: "Feed not found."
-                    };
-                }
-                data.feed = foundFeed;
-            }
-            function redefineItemHistoryMaxLength(data) {
-                let feedLength = data.items.length;
-                data.feed.maxHistoryLength = feedLength * self._historyLengthMultiplier;
-            }
-            function sortItemsByDate(data) {
-                data.items = lodash_1.default.sortBy(data.items, "date");
-            }
-            function identifyOnlyNewItems(data) {
-                data.newItems = data.items.filter((fetchedItem) => {
-                    let foundItemInsideFeed;
-                    foundItemInsideFeed = self._findItem(data.feed, fetchedItem);
-                    if (foundItemInsideFeed) {
-                        return false;
-                    }
-                    return fetchedItem;
-                });
-            }
-            function populateNewItemsInFeed(data) {
-                data.newItems.forEach((item) => {
-                    self._addItemToItemList(data.feed, item);
-                });
-                self._isFirst = false;
-            }
         }
         getContent();
         return setInterval(getContent, feed.refresh);
@@ -159,11 +153,15 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
     _addItemToItemList(feed, item) {
         if (this._isFirst && feed.ignoreFirst) {
             feed.items.push(item);
-            feed.items = lodash_1.default.takeRight(feed.items, feed.maxHistoryLength);
+            const maxHistory = feed.maxHistoryLength || 10;
+            const len = feed.items.length;
+            feed.items = feed.items.slice(len - maxHistory, len);
         }
         else {
             feed.items.push(item);
-            feed.items = lodash_1.default.takeRight(feed.items, feed.maxHistoryLength);
+            const maxHistory = feed.maxHistoryLength || 10;
+            const len = feed.items.length;
+            feed.items = feed.items.slice(len - maxHistory, len);
             this.emit("item:new", item);
         }
     }
@@ -171,9 +169,11 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
     _fetchFeed(feedUrl) {
         return new bluebird_1.default((reslove, reject) => {
             const feedparser = new feedparser_1.default({});
-            let data = {};
-            data.feedUrl = feedUrl;
-            data.items = [];
+            let data = {
+                feedUrl,
+                items: [],
+                newItems: []
+            };
             axios_1.default.get(feedUrl, {
                 responseType: "stream",
                 headers: {
@@ -203,5 +203,4 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
     }
 }
 exports.FeedEmitter = FeedEmitter;
-const RssFeedEmitter = FeedEmitter;
-exports.default = RssFeedEmitter;
+exports.default = FeedEmitter;

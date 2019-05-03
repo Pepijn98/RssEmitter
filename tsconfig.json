@@ -12,11 +12,18 @@
         "resolveJsonModule": true,
         "declaration": true,
         "outDir": "./dist",
+        "paths": {
+            "*": [
+                "node_modules/*"
+            ]
+        },
         "types": [
             "@types/bluebird",
             "@types/feedparser",
-            "@types/lodash",
             "@types/node"
         ]
-    }
+    },
+    "include": [
+        "lib/**/*"
+    ]
 }

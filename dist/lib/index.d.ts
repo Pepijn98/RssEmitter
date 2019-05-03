@@ -32,7 +32,7 @@ export interface FeedConfig {
 }
 export interface FeedData {
     feedUrl: string;
-    feed: FeedConfig;
+    feed?: FeedConfig;
     items: FeedItem[];
     newItems: FeedItem[];
 }
@@ -40,7 +40,7 @@ export declare class FeedError extends Error {
     type: string;
     message: string;
     feed: string;
-    constructor(type: string, message: string, feed: string);
+    constructor(type: string, message: string, feed?: string);
 }
 export declare class FeedEmitter extends TinyEmitter {
     /** @hidden */ private _feedList;
@@ -87,5 +87,4 @@ export declare class FeedEmitter extends TinyEmitter {
     /** @hidden */
     private _fetchFeed;
 }
-declare const RssFeedEmitter: typeof FeedEmitter;
-export default RssFeedEmitter;
+export default FeedEmitter;
