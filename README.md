@@ -52,7 +52,7 @@ console.log(feeds);
 
 const Rss = require("rss-emitter-ts");
 const rss = new Rss.FeedEmitter();
- 
+
 rss.add({ url: "https://hnrss.org/frontpage", refresh: 20000, ignoreFirst: true });
 
 rss.on("item:new", (item) => console.log(item.title));
@@ -64,7 +64,7 @@ console.log(feeds);
 ```
 
 # Docs
-https://kurozeropb.info/rss-emitter/docs
+https://kurozeropb.github.io/RssEmitter/
 
 | Emitted events |                                                     |
 |----------------|-----------------------------------------------------|
