@@ -59,6 +59,12 @@ export declare class FeedEmitter extends TinyEmitter {
      */
     add(feedConfig: FeedConfig): FeedConfig[];
     /**
+     * Get specific feed from the feedlist
+     * @param {string} url
+     * @returns {FeedConfig|undefined}
+     */
+    get(url: string): FeedConfig | undefined;
+    /**
      * Remove a feed from the feed list
      * @param {string} url
      */

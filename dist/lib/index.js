@@ -40,6 +40,14 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
         return this._feedList;
     }
     /**
+     * Get specific feed from the feedlist
+     * @param {string} url
+     * @returns {FeedConfig|undefined}
+     */
+    get(url) {
+        return this._findFeed({ url });
+    }
+    /**
      * Remove a feed from the feed list
      * @param {string} url
      */
