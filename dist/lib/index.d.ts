@@ -4,6 +4,7 @@ import { Item, Meta, Image } from "feedparser";
 import { TinyEmitter } from "tiny-emitter";
 export interface Options {
     userAgent?: string;
+    debug?: boolean;
 }
 export interface FeedItem extends Item {
     title: string;
@@ -45,6 +46,7 @@ export declare class FeedError extends Error {
 export declare class FeedEmitter extends TinyEmitter {
     /** @hidden */ private _feedList;
     /** @hidden */ private _userAgent;
+    /** @hidden */ private _debug;
     /** @hidden */ private _historyLengthMultiplier;
     /**
      * Initialize the rss feed emitter

@@ -27,6 +27,7 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
         super();
         this._feedList = [];
         this._userAgent = options.userAgent || `RssEmitter/v${package_json_1.version} (https://github.com/kurozeropb/RssEmitter)`;
+        this._debug = options.debug || false;
         this._historyLengthMultiplier = 3;
     }
     /**
@@ -138,6 +139,7 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
             }
             function populateNewItemsInFeed(data) {
                 data.newItems.forEach((item) => self._addItemToItemList(data.feed, item));
+                data.feed.ignoreFirst = false;
             }
             self._fetchFeed(feed.url)
                 .tap(findFeed)
@@ -158,18 +160,25 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
     /** @hidden */
     _addItemToItemList(feed, item) {
         if (feed.ignoreFirst) {
+            if (this._debug)
+                console.debug("Silently adding item to history");
             feed.items.push(item);
             const maxHistory = feed.maxHistoryLength || 10;
             const len = feed.items.length;
             feed.items = feed.items.slice(len - maxHistory, len);
-            feed.ignoreFirst = false;
+            if (this._debug)
+                console.debug(`feed.ignoreFirst = ${feed.ignoreFirst}`);
         }
         else {
+            if (this._debug)
+                console.debug("Adding new item to history");
             feed.items.push(item);
             const maxHistory = feed.maxHistoryLength || 10;
             const len = feed.items.length;
             feed.items = feed.items.slice(len - maxHistory, len);
             this.emit("item:new", item);
+            if (this._debug)
+                console.debug(`item = ${JSON.stringify(item)}`);
         }
     }
     /** @hidden */
