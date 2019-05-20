@@ -46,7 +46,6 @@ export declare class FeedEmitter extends TinyEmitter {
     /** @hidden */ private _feedList;
     /** @hidden */ private _userAgent;
     /** @hidden */ private _historyLengthMultiplier;
-    /** @hidden */ private _isFirst;
     /**
      * Initialize the rss feed emitter
      * @param {Options} options

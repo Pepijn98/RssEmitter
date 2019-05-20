@@ -6,6 +6,7 @@ import { TinyEmitter } from "tiny-emitter";
 
 export interface Options {
     userAgent?: string;
+    debug?: boolean;
 }
 
 export interface FeedItem extends Item {
@@ -59,8 +60,8 @@ export class FeedError extends Error {
 export class FeedEmitter extends TinyEmitter {
     /** @hidden */ private _feedList: FeedConfig[];
     /** @hidden */ private _userAgent: string;
+    /** @hidden */ private _debug: boolean;
     /** @hidden */ private _historyLengthMultiplier: number;
-    /** @hidden */ private _isFirst: boolean;
 
     /**
      * Initialize the rss feed emitter
@@ -71,8 +72,8 @@ export class FeedEmitter extends TinyEmitter {
 
         this._feedList = [];
         this._userAgent = options.userAgent || `RssEmitter/v${version} (https://github.com/kurozeropb/RssEmitter)`;
+        this._debug = options.debug || false;
         this._historyLengthMultiplier = 3;
-        this._isFirst = true;
     }
 
     /**
@@ -205,7 +206,7 @@ export class FeedEmitter extends TinyEmitter {
 
             function populateNewItemsInFeed(data: FeedData): void {
                 data.newItems.forEach((item) => self._addItemToItemList(data.feed!, item));
-                self._isFirst = false;
+                data.feed!.ignoreFirst = false;
             }
 
             self._fetchFeed(feed.url)
@@ -230,18 +231,22 @@ export class FeedEmitter extends TinyEmitter {
 
     /** @hidden */
     private _addItemToItemList(feed: FeedConfig, item: FeedItem): void {
-        if (this._isFirst && feed.ignoreFirst) {
+        if (feed.ignoreFirst) {
+            if (this._debug) console.debug("Silently adding item to history");
             feed.items!.push(item);
 
             const maxHistory = feed.maxHistoryLength || 10;
             const len = feed.items!.length;
             feed.items = feed.items!.slice(len - maxHistory, len);
+            if (this._debug) console.debug(`feed.ignoreFirst = ${feed.ignoreFirst}`);
         } else {
+            if (this._debug) console.debug("Adding new item to history");
             feed.items!.push(item);
             const maxHistory = feed.maxHistoryLength || 10;
             const len = feed.items!.length;
             feed.items = feed.items!.slice(len - maxHistory, len);
             this.emit("item:new", item);
+            if (this._debug) console.debug(`item = ${JSON.stringify(item)}`);
         }
     }
 

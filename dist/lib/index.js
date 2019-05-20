@@ -28,7 +28,6 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
         this._feedList = [];
         this._userAgent = options.userAgent || `RssEmitter/v${package_json_1.version} (https://github.com/kurozeropb/RssEmitter)`;
         this._historyLengthMultiplier = 3;
-        this._isFirst = true;
     }
     /**
      * Add a new feed to the feed list
@@ -139,7 +138,6 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
             }
             function populateNewItemsInFeed(data) {
                 data.newItems.forEach((item) => self._addItemToItemList(data.feed, item));
-                self._isFirst = false;
             }
             self._fetchFeed(feed.url)
                 .tap(findFeed)
@@ -159,11 +157,12 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
     }
     /** @hidden */
     _addItemToItemList(feed, item) {
-        if (this._isFirst && feed.ignoreFirst) {
+        if (feed.ignoreFirst) {
             feed.items.push(item);
             const maxHistory = feed.maxHistoryLength || 10;
             const len = feed.items.length;
             feed.items = feed.items.slice(len - maxHistory, len);
+            feed.ignoreFirst = false;
         }
         else {
             feed.items.push(item);
