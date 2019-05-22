@@ -15,6 +15,17 @@
 # RssEmitter
 Emit rss feed items, written in TypeScript
 
+# Docs
+https://kurozeropb.github.io/RssEmitter/
+
+| Emitted events | Params            | Description                                                  |
+|----------------|-------------------|--------------------------------------------------------------|
+| item:new       | item:  Item       | emits when a new item is added to the rss feed               |
+| feed:init      | feed:  FeedConfig | emits when a feed is done loading it's initial items         |
+| feed:new       | feed:  FeedConfig | emits when a new feed is added using FeedEmitter#add()       |
+| feed:update    | feed:  FeedConfig | emits when an existing feed is added using FeedEmitter#add() |
+| feed:error     | error: FeedError  | emits when an error occured while checking the feed          |
+
 # Example
 ```ts
 // TypeScript
@@ -48,6 +59,8 @@ const feeds = allFeeds.map((feed: FeedConfig) => feed.url).join("\n");
 console.log(feeds);
 ```
 
+<br/><br/>
+
 ```js
 // JavaScript
 
@@ -63,11 +76,3 @@ const allFeeds = emitter.list();
 const feeds = allFeeds.map((feed) => feed.url).join("\n");
 console.log(feeds);
 ```
-
-# Docs
-https://kurozeropb.github.io/RssEmitter/
-
-| Emitted events |                                                     |
-|----------------|-----------------------------------------------------|
-| item:new       | emits when a new item is added to the rss feed      |
-| feed:error     | emits when an error occured while checking the feed |

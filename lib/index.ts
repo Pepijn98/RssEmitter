@@ -123,12 +123,15 @@ export class FeedEmitter extends TinyEmitter {
     /** @hidden */
     private _addOrUpdateFeedList(feed: FeedConfig): void {
         let feedInList = this._findFeed(feed);
+        let update = false;
 
         if (feedInList) {
             this._removeFromFeedList(feedInList);
+            update = true;
         }
 
-        return this._addToFeedList(feed);
+        this._addToFeedList(feed);
+        update ? this.emit("feed:update", feed) : this.emit("feed:new", feed);
     }
 
     /** @hidden */
@@ -167,6 +170,7 @@ export class FeedEmitter extends TinyEmitter {
         feed.refresh = feed.refresh ? feed.refresh : 60000;
         feed.setInterval = this._createSetInterval(feed);
         this._feedList.push(feed);
+        this.emit("feed:init", feed);
     }
 
     /** @hidden */

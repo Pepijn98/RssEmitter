@@ -1,6 +1,6 @@
 {
     "name": "rss-emitter-ts",
-    "version": "0.2.3",
+    "version": "0.3.0",
     "description": "Emit rss feed items, written in TypeScript",
     "author": {
         "email": "root@kurozeropb.info",
