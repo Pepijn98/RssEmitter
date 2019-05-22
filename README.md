@@ -18,13 +18,13 @@ Emit rss feed items, written in TypeScript
 # Docs
 https://kurozeropb.github.io/RssEmitter/
 
-| Emitted events | Params            | Description                                                  |
-|----------------|-------------------|--------------------------------------------------------------|
-| item:new       | item:  FeedItem   | emits when a new item is added to the rss feed               |
-| feed:init      | feed:  FeedConfig | emits when a feed is done loading it's initial items         |
-| feed:new       | feed:  FeedConfig | emits when a new feed is added using FeedEmitter#add()       |
-| feed:update    | feed:  FeedConfig | emits when an existing feed is added using FeedEmitter#add() |
-| feed:error     | error: FeedError  | emits when an error occured while checking the feed          |
+| Emitted events | Params            | Description                                                  | Since |
+|----------------|-------------------|--------------------------------------------------------------|-------|
+| item:new       | item:  FeedItem   | emits when a new item is added to the rss feed               | 0.0.1 |
+| feed:init      | feed:  FeedConfig | emits when a feed is done loading it's initial items         | 0.3.0 |
+| feed:new       | feed:  FeedConfig | emits when a new feed is added using FeedEmitter#add()       | 0.3.0 |
+| feed:update    | feed:  FeedConfig | emits when an existing feed is added using FeedEmitter#add() | 0.3.0 |
+| feed:error     | error: FeedError  | emits when an error occured while checking the feed          | 0.0.1 |
 
 # Example
 ```ts
