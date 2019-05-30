@@ -131,7 +131,7 @@ export class FeedEmitter extends TinyEmitter {
         }
 
         this._addToFeedList(feed);
-        update ? this.emit("feed:update", feed) : this.emit("feed:new", feed);
+        update ? this.emit("feed:update", feed) : this.emit("feed:new", feed); // eslint-disable-line no-unused-expressions
     }
 
     /** @hidden */
