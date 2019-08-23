@@ -1,6 +1,6 @@
 /// <reference types="@types/feedparser" />
 /// <reference types="node" />
-import { Item, Meta, Image } from "feedparser";
+import { Item, Meta, Image, Enclosure } from "feedparser";
 import { TinyEmitter } from "tiny-emitter";
 export interface Options {
     userAgent?: string;
@@ -19,7 +19,7 @@ export interface FeedItem extends Item {
     comments: string;
     image: Image;
     categories: string[];
-    enclosures: string[];
+    enclosures: Enclosure[];
     meta: Meta;
     [x: string]: any;
 }

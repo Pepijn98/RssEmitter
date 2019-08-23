@@ -1,6 +1,6 @@
 import Bluebird from "bluebird";
 import Axios, { AxiosResponse } from "axios";
-import FeedParser, { Item, Meta, Image } from "feedparser";
+import FeedParser, { Item, Meta, Image, Enclosure } from "feedparser";
 import { version } from "../package.json";
 import { TinyEmitter } from "tiny-emitter";
 
@@ -22,7 +22,7 @@ export interface FeedItem extends Item {
     comments: string;
     image: Image;
     categories: string[];
-    enclosures: string[];
+    enclosures: Enclosure[];
     meta: Meta;
     [x: string]: any;
 };
