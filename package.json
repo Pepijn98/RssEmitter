@@ -31,7 +31,6 @@
         "url": "https://github.com/KurozeroPB/RssEmitter.git"
     },
     "scripts": {
-        "publish": "npm publish",
         "test": "mocha",
         "check": "gts check",
         "clean": "gts clean",
