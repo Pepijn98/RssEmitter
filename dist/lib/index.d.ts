@@ -1,6 +1,6 @@
 /// <reference types="@types/feedparser" />
-/// <reference types="node" />
 import { Item, Meta, Image, Enclosure } from "feedparser";
+import { Interval } from "yukikaze";
 import { TinyEmitter } from "tiny-emitter";
 export interface Options {
     userAgent?: string;
@@ -27,7 +27,7 @@ export interface FeedConfig {
     url: string;
     ignoreFirst?: boolean;
     maxHistoryLength?: number;
-    setInterval?: NodeJS.Timeout;
+    interval?: Interval;
     refresh?: number;
     items?: FeedItem[];
 }

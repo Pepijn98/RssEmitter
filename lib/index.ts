@@ -1,6 +1,7 @@
 import Bluebird from "bluebird";
 import Axios, { AxiosResponse } from "axios";
 import FeedParser, { Item, Meta, Image, Enclosure } from "feedparser";
+import { Interval } from "yukikaze";
 import { version } from "../package.json";
 import { TinyEmitter } from "tiny-emitter";
 
@@ -31,7 +32,7 @@ export interface FeedConfig {
     url: string;
     ignoreFirst?: boolean;
     maxHistoryLength?: number;
-    setInterval?: NodeJS.Timeout;
+    interval?: Interval;
     refresh?: number;
     items?: FeedItem[];
 }
@@ -141,9 +142,9 @@ export class FeedEmitter extends TinyEmitter {
 
     /** @hidden */
     private _removeFromFeedList(feed: FeedConfig | undefined): void {
-        if (!feed || !feed.setInterval) return;
+        if (!feed || !feed.interval) return;
 
-        clearInterval(feed.setInterval);
+        feed.interval.stop();
 
         for (let i = 0; i < this._feedList.length; i++) {
             if (this._feedList[i].url === feed.url) {
@@ -168,13 +169,14 @@ export class FeedEmitter extends TinyEmitter {
     private _addToFeedList(feed: FeedConfig): void {
         feed.items = [];
         feed.refresh = feed.refresh ? feed.refresh : 60000;
-        feed.setInterval = this._createSetInterval(feed);
+        feed.interval = this._createSetInterval(feed);
         this._feedList.push(feed);
         this.emit("feed:init", feed);
     }
 
     /** @hidden */
-    private _createSetInterval(feed: FeedConfig): NodeJS.Timeout {
+    private _createSetInterval(feed: FeedConfig): Interval {
+        const interval = new Interval();
         const self = this;
 
         function getContent(): void {
@@ -230,7 +232,8 @@ export class FeedEmitter extends TinyEmitter {
 
         getContent();
 
-        return setInterval(getContent, feed.refresh!);
+        interval.run(getContent, feed.refresh!);
+        return interval;
     }
 
     /** @hidden */

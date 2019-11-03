@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bluebird_1 = __importDefault(require("bluebird"));
 const axios_1 = __importDefault(require("axios"));
 const feedparser_1 = __importDefault(require("feedparser"));
+const yukikaze_1 = require("yukikaze");
 const package_json_1 = require("../package.json");
 const tiny_emitter_1 = require("tiny-emitter");
 ;
@@ -86,9 +87,9 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
     }
     /** @hidden */
     _removeFromFeedList(feed) {
-        if (!feed || !feed.setInterval)
+        if (!feed || !feed.interval)
             return;
-        clearInterval(feed.setInterval);
+        feed.interval.stop();
         for (let i = 0; i < this._feedList.length; i++) {
             if (this._feedList[i].url === feed.url) {
                 this._feedList.splice(i, 1);
@@ -109,12 +110,13 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
     _addToFeedList(feed) {
         feed.items = [];
         feed.refresh = feed.refresh ? feed.refresh : 60000;
-        feed.setInterval = this._createSetInterval(feed);
+        feed.interval = this._createSetInterval(feed);
         this._feedList.push(feed);
         this.emit("feed:init", feed);
     }
     /** @hidden */
     _createSetInterval(feed) {
+        const interval = new yukikaze_1.Interval();
         const self = this;
         function getContent() {
             function findFeed(data) {
@@ -159,7 +161,8 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
             });
         }
         getContent();
-        return setInterval(getContent, feed.refresh);
+        interval.run(getContent, feed.refresh);
+        return interval;
     }
     /** @hidden */
     _addItemToItemList(feed, item) {
