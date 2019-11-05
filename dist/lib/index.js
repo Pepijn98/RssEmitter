@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bluebird_1 = __importDefault(require("bluebird"));
 const axios_1 = __importDefault(require("axios"));
 const feedparser_1 = __importDefault(require("feedparser"));
-const yukikaze_1 = require("yukikaze");
+const yukikaze_1 = __importDefault(require("yukikaze"));
 const package_json_1 = require("../package.json");
 const tiny_emitter_1 = require("tiny-emitter");
 ;
@@ -116,7 +116,7 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
     }
     /** @hidden */
     _createSetInterval(feed) {
-        const interval = new yukikaze_1.Interval();
+        const interval = new yukikaze_1.default();
         const self = this;
         function getContent() {
             function findFeed(data) {

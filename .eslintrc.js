@@ -14,12 +14,14 @@ module.exports = {
         "parser": "@typescript-eslint/parser"
     },
     "rules": {
+        "@typescript-eslint/ban-ts-ignore": "off",
         "@typescript-eslint/explicit-function-return-type": ["error", {
             "allowExpressions": true
         }],
         "@typescript-eslint/interface-name-prefix": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/no-this-alias": "off",
         "accessor-pairs": "error",
         "array-bracket-newline": "error",
         "array-bracket-spacing": [
@@ -135,7 +137,7 @@ module.exports = {
             10
         ],
         "max-len": "off",
-        "max-lines": "error",
+        "max-lines": "off",
         "max-lines-per-function": [
             "error",
             150

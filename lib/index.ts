@@ -1,7 +1,7 @@
 import Bluebird from "bluebird";
 import Axios, { AxiosResponse } from "axios";
 import FeedParser, { Item, Meta, Image, Enclosure } from "feedparser";
-import { Interval } from "yukikaze";
+import Interval from "yukikaze";
 import { version } from "../package.json";
 import { TinyEmitter } from "tiny-emitter";
 
