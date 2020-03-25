@@ -26,53 +26,5 @@ https://kurozeropb.github.io/RssEmitter/
 | feed:update    | feed:  FeedConfig | emits when an existing feed is added using FeedEmitter#add() | 0.3.0 |
 | feed:error     | error: FeedError  | emits when an error occured while checking the feed          | 0.0.1 |
 
-# Example
-```ts
-// TypeScript
-
-import {
-    FeedEmitter,
-    FeedItem,
-    FeedConfig,
-    FeedError
-} from "rss-emitter-ts";
-
-const emitter = new FeedEmitter();
-
-// Add a new feed
-emitter.add({ url: "https://hnrss.org/frontpage", refresh: 20000, ignoreFirst: true });
-
-// Listen to the emitted events
-emitter.on("item:new", (item: FeedItem) => {
-    const message = `New item:\n${item.title}\n${item.description}`;
-    console.log(message);
-});
-
-emitter.on("feed:error", (error: FeedError) => {
-    const errorMsg = `Type: ${error.type}\nFeed: ${error.feed}\nMessage: ${error.message}`;
-    console.error(errorMsg);
-});
-
-// List all feeds
-const allFeeds = emitter.list();
-const feeds = allFeeds.map((feed: FeedConfig) => feed.url).join("\n");
-console.log(feeds);
-```
-
-<br/><br/>
-
-```js
-// JavaScript
-
-const { FeedEmitter } = require("rss-emitter-ts");
-const emitter = new FeedEmitter();
-
-emitter.add({ url: "https://hnrss.org/frontpage", refresh: 20000, ignoreFirst: true });
-
-emitter.on("item:new", (item) => console.log(item.title));
-emitter.on("feed:error", (error) => console.error(error.message));
-
-const allFeeds = emitter.list();
-const feeds = allFeeds.map((feed) => feed.url).join("\n");
-console.log(feeds);
-```
+## Examples
+Can be found in the [examples](/examples) folder

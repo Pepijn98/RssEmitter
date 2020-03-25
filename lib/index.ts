@@ -45,11 +45,11 @@ export interface FeedData {
 }
 
 export class FeedError extends Error {
-    public type: string;
-    public message: string;
-    public feed: string;
+    type: string;
+    message: string;
+    feed: string;
 
-    public constructor(type: string, message: string, feed?: string) {
+    constructor(type: string, message: string, feed?: string) {
         super();
 
         this.type = type;
@@ -59,16 +59,16 @@ export class FeedError extends Error {
 }
 
 export class FeedEmitter extends TinyEmitter {
-    /** @hidden */ private _feedList: FeedConfig[];
-    /** @hidden */ private _userAgent: string;
-    /** @hidden */ private _debug: boolean;
-    /** @hidden */ private _historyLengthMultiplier: number;
+    private _feedList: FeedConfig[];
+    private _userAgent: string;
+    private _debug: boolean;
+    private _historyLengthMultiplier: number;
 
     /**
      * Initialize the rss feed emitter
      * @param {Options} options
      */
-    public constructor(options: Options = {}) {
+    constructor(options: Options = {}) {
         super();
 
         this._feedList = [];
@@ -82,7 +82,7 @@ export class FeedEmitter extends TinyEmitter {
      * @param {FeedConfig} feedConfig
      * @returns {Array<FeedConfig>}
      */
-    public add(feedConfig: FeedConfig): FeedConfig[] {
+    add(feedConfig: FeedConfig): FeedConfig[] {
         this._addOrUpdateFeedList(feedConfig);
         return this._feedList;
     }
@@ -92,7 +92,7 @@ export class FeedEmitter extends TinyEmitter {
      * @param {string} url
      * @returns {FeedConfig|undefined}
      */
-    public get(url: string): FeedConfig | undefined {
+    get(url: string): FeedConfig | undefined {
         return this._findFeed({ url });
     }
 
@@ -100,8 +100,8 @@ export class FeedEmitter extends TinyEmitter {
      * Remove a feed from the feed list
      * @param {string} url
      */
-    public remove(url: string): void {
-        let feed = this._findFeed({ url });
+    remove(url: string): void {
+        const feed = this._findFeed({ url });
         return this._removeFromFeedList(feed);
     }
 
@@ -109,21 +109,20 @@ export class FeedEmitter extends TinyEmitter {
      * List all feeds
      * @returns {Array<FeedConfig>}
      */
-    public list(): FeedConfig[] {
+    list(): FeedConfig[] {
         return this._feedList;
     }
 
     /** Remove all feeds */
-    public destroy(): void {
+    destroy(): void {
         for (let i = this._feedList.length - 1; i >= 0; i--) {
-            let feed = this._feedList[i];
+            const feed = this._feedList[i];
             this._removeFromFeedList(feed);
         }
     }
 
-    /** @hidden */
     private _addOrUpdateFeedList(feed: FeedConfig): void {
-        let feedInList = this._findFeed(feed);
+        const feedInList = this._findFeed(feed);
         let update = false;
 
         if (feedInList) {
@@ -135,12 +134,10 @@ export class FeedEmitter extends TinyEmitter {
         update ? this.emit("feed:update", feed) : this.emit("feed:new", feed); // eslint-disable-line no-unused-expressions
     }
 
-    /** @hidden */
     private _findFeed(feed: FeedConfig): FeedConfig | undefined {
         return this._feedList.find((x) => x.url === feed.url);
     }
 
-    /** @hidden */
     private _removeFromFeedList(feed: FeedConfig | undefined): void {
         if (!feed || !feed.interval) return;
 
@@ -154,7 +151,6 @@ export class FeedEmitter extends TinyEmitter {
         }
     }
 
-    /** @hidden */
     private _findItem(feed: FeedConfig, item: FeedItem): FeedItem | undefined {
         if (!feed.items) return void 0;
 
@@ -165,7 +161,6 @@ export class FeedEmitter extends TinyEmitter {
         return feed.items.find((x) => x.link === item.link && x.title === item.title);
     }
 
-    /** @hidden */
     private _addToFeedList(feed: FeedConfig): void {
         feed.items = [];
         feed.refresh = feed.refresh ? feed.refresh : 60000;
@@ -174,14 +169,13 @@ export class FeedEmitter extends TinyEmitter {
         this.emit("feed:init", feed);
     }
 
-    /** @hidden */
     private _createSetInterval(feed: FeedConfig): Interval {
         const interval = new Interval();
         const self = this;
 
         function getContent(): void {
             function findFeed(data: FeedData): void {
-                let foundFeed = self._findFeed({ url: data.feedUrl });
+                const foundFeed = self._findFeed({ url: data.feedUrl });
 
                 if (!foundFeed) {
                     throw new FeedError("feed_not_found", "Feed not found.");
@@ -191,13 +185,12 @@ export class FeedEmitter extends TinyEmitter {
             }
 
             function redefineItemHistoryMaxLength(data: FeedData): void {
-                let feedLength = data.items.length;
+                const feedLength = data.items.length;
                 data.feed!.maxHistoryLength = feedLength * self._historyLengthMultiplier;
             }
 
             function sortItemsByDate(data: FeedData): void {
-                // @ts-ignore
-                data.items = data.items.sort((a, b) => b.date - a.date);
+                data.items = data.items.sort((a: any, b: any) => b.date - a.date);
             }
 
             function identifyOnlyNewItems(data: FeedData): void {
@@ -212,7 +205,6 @@ export class FeedEmitter extends TinyEmitter {
 
             function populateNewItemsInFeed(data: FeedData): void {
                 data.newItems.forEach((item) => self._addItemToItemList(data.feed!, item));
-                data.feed!.ignoreFirst = false;
             }
 
             self._fetchFeed(feed.url)
@@ -221,6 +213,7 @@ export class FeedEmitter extends TinyEmitter {
                 .tap(sortItemsByDate)
                 .tap(identifyOnlyNewItems)
                 .tap(populateNewItemsInFeed)
+                .then((data) => data.feed!.ignoreFirst = false)
                 .catch((error: FeedError) => {
                     if (error.type === "feed_not_found") {
                         return;
@@ -236,12 +229,10 @@ export class FeedEmitter extends TinyEmitter {
         return interval;
     }
 
-    /** @hidden */
     private _addItemToItemList(feed: FeedConfig, item: FeedItem): void {
         if (feed.ignoreFirst) {
             if (this._debug) console.debug("Silently adding item to history");
             feed.items!.push(item);
-
             const maxHistory = feed.maxHistoryLength || 10;
             const len = feed.items!.length;
             feed.items = feed.items!.slice(len - maxHistory, len);
@@ -257,12 +248,11 @@ export class FeedEmitter extends TinyEmitter {
         }
     }
 
-    /** @hidden */
     private _fetchFeed(feedUrl: string): Bluebird<FeedData> {
         return new Bluebird((reslove, reject) => {
             const feedparser = new FeedParser({});
 
-            let data: FeedData = {
+            const data: FeedData = {
                 feedUrl,
                 items: [],
                 newItems: []
@@ -286,7 +276,7 @@ export class FeedEmitter extends TinyEmitter {
             });
 
             feedparser.on("readable", () => {
-                let item = feedparser.read();
+                const item = feedparser.read();
                 if (!item) return;
                 item.meta.link = feedUrl;
                 data.items.push(item);

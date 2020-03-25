@@ -1,6 +1,6 @@
 {
     "name": "rss-emitter-ts",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "description": "Emit rss feed items, written in TypeScript",
     "author": {
         "email": "root@kurozeropb.info",
@@ -31,34 +31,32 @@
         "url": "https://github.com/KurozeroPB/RssEmitter.git"
     },
     "scripts": {
+        "prepare": "npm run compile",
+        "pretest": "npm run lint",
         "test": "mocha",
-        "check": "gts check",
-        "clean": "gts clean",
-        "compile": "yarn clean && tsc -p .",
-        "fix": "gts fix",
-        "lint": "eslint --ext .ts .",
-        "lint:fix": "eslint --ext .ts --fix .",
-        "prepare": "yarn compile",
+        "compile": "npm run clean && tsc -p .",
         "docs": "typedoc && cp .nojekyll docs/",
-        "generate": "yarn compile && yarn docs",
-        "pretest": "yarn check && yarn lint"
+        "generate": "npm run compile && npm run docs",
+        "clean": "gts clean",
+        "lint": "eslint --ext .ts .",
+        "lint:fix": "eslint --ext .ts --fix ."
     },
     "dependencies": {
-        "@types/bluebird": "^3.5.28",
+        "@types/bluebird": "^3.5.30",
         "@types/feedparser": "^2.2.3",
-        "@types/node": "^12.12.5",
-        "axios": "^0.19.0",
-        "bluebird": "^3.7.1",
+        "@types/node": "^13.9.3",
+        "axios": "^0.19.2",
+        "bluebird": "^3.7.2",
         "feedparser": "^2.2.9",
         "tiny-emitter": "^2.1.0",
         "yukikaze": "^0.2.1"
     },
     "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "^2.6.1",
-        "@typescript-eslint/parser": "^2.6.1",
-        "eslint": "^6.6.0",
-        "gts": "^1.1.0",
-        "mocha": "^6.2.2",
-        "typescript": "^3.6.4"
+        "@typescript-eslint/eslint-plugin": "^2.25.0",
+        "@typescript-eslint/parser": "^2.25.0",
+        "eslint": "^6.8.0",
+        "gts": "^1.1.2",
+        "mocha": "^7.1.1",
+        "typescript": "^3.8.3"
     }
 }

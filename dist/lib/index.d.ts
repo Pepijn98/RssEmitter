@@ -44,10 +44,10 @@ export declare class FeedError extends Error {
     constructor(type: string, message: string, feed?: string);
 }
 export declare class FeedEmitter extends TinyEmitter {
-    /** @hidden */ private _feedList;
-    /** @hidden */ private _userAgent;
-    /** @hidden */ private _debug;
-    /** @hidden */ private _historyLengthMultiplier;
+    private _feedList;
+    private _userAgent;
+    private _debug;
+    private _historyLengthMultiplier;
     /**
      * Initialize the rss feed emitter
      * @param {Options} options
@@ -77,21 +77,13 @@ export declare class FeedEmitter extends TinyEmitter {
     list(): FeedConfig[];
     /** Remove all feeds */
     destroy(): void;
-    /** @hidden */
     private _addOrUpdateFeedList;
-    /** @hidden */
     private _findFeed;
-    /** @hidden */
     private _removeFromFeedList;
-    /** @hidden */
     private _findItem;
-    /** @hidden */
     private _addToFeedList;
-    /** @hidden */
     private _createSetInterval;
-    /** @hidden */
     private _addItemToItemList;
-    /** @hidden */
     private _fetchFeed;
 }
 export default FeedEmitter;

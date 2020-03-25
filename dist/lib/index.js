@@ -53,7 +53,7 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
      * @param {string} url
      */
     remove(url) {
-        let feed = this._findFeed({ url });
+        const feed = this._findFeed({ url });
         return this._removeFromFeedList(feed);
     }
     /**
@@ -66,13 +66,12 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
     /** Remove all feeds */
     destroy() {
         for (let i = this._feedList.length - 1; i >= 0; i--) {
-            let feed = this._feedList[i];
+            const feed = this._feedList[i];
             this._removeFromFeedList(feed);
         }
     }
-    /** @hidden */
     _addOrUpdateFeedList(feed) {
-        let feedInList = this._findFeed(feed);
+        const feedInList = this._findFeed(feed);
         let update = false;
         if (feedInList) {
             this._removeFromFeedList(feedInList);
@@ -81,11 +80,9 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
         this._addToFeedList(feed);
         update ? this.emit("feed:update", feed) : this.emit("feed:new", feed); // eslint-disable-line no-unused-expressions
     }
-    /** @hidden */
     _findFeed(feed) {
         return this._feedList.find((x) => x.url === feed.url);
     }
-    /** @hidden */
     _removeFromFeedList(feed) {
         if (!feed || !feed.interval)
             return;
@@ -97,7 +94,6 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
             }
         }
     }
-    /** @hidden */
     _findItem(feed, item) {
         if (!feed.items)
             return void 0;
@@ -106,7 +102,6 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
         }
         return feed.items.find((x) => x.link === item.link && x.title === item.title);
     }
-    /** @hidden */
     _addToFeedList(feed) {
         feed.items = [];
         feed.refresh = feed.refresh ? feed.refresh : 60000;
@@ -114,24 +109,22 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
         this._feedList.push(feed);
         this.emit("feed:init", feed);
     }
-    /** @hidden */
     _createSetInterval(feed) {
         const interval = new yukikaze_1.default();
         const self = this;
         function getContent() {
             function findFeed(data) {
-                let foundFeed = self._findFeed({ url: data.feedUrl });
+                const foundFeed = self._findFeed({ url: data.feedUrl });
                 if (!foundFeed) {
                     throw new FeedError("feed_not_found", "Feed not found.");
                 }
                 data.feed = foundFeed;
             }
             function redefineItemHistoryMaxLength(data) {
-                let feedLength = data.items.length;
+                const feedLength = data.items.length;
                 data.feed.maxHistoryLength = feedLength * self._historyLengthMultiplier;
             }
             function sortItemsByDate(data) {
-                // @ts-ignore
                 data.items = data.items.sort((a, b) => b.date - a.date);
             }
             function identifyOnlyNewItems(data) {
@@ -145,7 +138,6 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
             }
             function populateNewItemsInFeed(data) {
                 data.newItems.forEach((item) => self._addItemToItemList(data.feed, item));
-                data.feed.ignoreFirst = false;
             }
             self._fetchFeed(feed.url)
                 .tap(findFeed)
@@ -153,6 +145,7 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
                 .tap(sortItemsByDate)
                 .tap(identifyOnlyNewItems)
                 .tap(populateNewItemsInFeed)
+                .then((data) => data.feed.ignoreFirst = false)
                 .catch((error) => {
                 if (error.type === "feed_not_found") {
                     return;
@@ -164,7 +157,6 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
         interval.run(getContent, feed.refresh);
         return interval;
     }
-    /** @hidden */
     _addItemToItemList(feed, item) {
         if (feed.ignoreFirst) {
             if (this._debug)
@@ -188,11 +180,10 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
                 console.debug(`item = ${JSON.stringify(item)}`);
         }
     }
-    /** @hidden */
     _fetchFeed(feedUrl) {
         return new bluebird_1.default((reslove, reject) => {
             const feedparser = new feedparser_1.default({});
-            let data = {
+            const data = {
                 feedUrl,
                 items: [],
                 newItems: []
@@ -213,7 +204,7 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
                 reject(new FeedError("fetch_url_error", `Cannot connect to ${feedUrl}`, feedUrl));
             });
             feedparser.on("readable", () => {
-                let item = feedparser.read();
+                const item = feedparser.read();
                 if (!item)
                     return;
                 item.meta.link = feedUrl;
