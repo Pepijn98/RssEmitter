@@ -1,7 +1,7 @@
 import { FeedEmitter, FeedItem, FeedError, FeedConfig } from "../";
 
-const feeds = [
-    { url: "http://www.horriblesubs.info/rss.php?res=all", refresh: 20000, ignoreFirst: true },
+const feeds: FeedConfig[] = [
+    { url: "http://www.horriblesubs.info/rss.php?res=all", refresh: 20000, eventName: "horriblesubs", ignoreFirst: true },
     { url: "https://hnrss.org/frontpage", refresh: 20000, ignoreFirst: true },
     { url: "https://github.com/reportapp/Api/commits/master.atom", refresh: 20000, ignoreFirst: true },
     { url: "https://github.com/kurozeropb/Jeanne/commits/master.atom", refresh: 20000, ignoreFirst: true },
@@ -17,6 +17,10 @@ emitter.on("feed:new", (config: FeedConfig) => {
 
 emitter.on("item:new", (item: FeedItem) => {
     console.log(`New item: (${item.link})\n${item.title}\n${item.description}\n\n`);
+});
+
+emitter.on("item:new:horriblesubs", (item: FeedItem) => {
+    console.log(`New item from horriblesubs: (${item.link})\n${item.title}\n${item.description}\n\n`);
 });
 
 emitter.on("feed:error", (error: FeedError) => {

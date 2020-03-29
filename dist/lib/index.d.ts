@@ -25,6 +25,7 @@ export interface FeedItem extends Item {
 }
 export interface FeedConfig {
     url: string;
+    eventName?: string;
     ignoreFirst?: boolean;
     maxHistoryLength?: number;
     interval?: Interval;

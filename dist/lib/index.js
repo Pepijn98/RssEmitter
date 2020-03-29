@@ -175,7 +175,8 @@ class FeedEmitter extends tiny_emitter_1.TinyEmitter {
             const maxHistory = feed.maxHistoryLength || 10;
             const len = feed.items.length;
             feed.items = feed.items.slice(len - maxHistory, len);
-            this.emit("item:new", item);
+            const newItemEventName = feed.eventName ? (`item:new:${feed.eventName}`) : "item:new";
+            this.emit(newItemEventName, item);
             if (this._debug)
                 console.debug(`item = ${JSON.stringify(item)}`);
         }

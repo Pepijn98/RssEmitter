@@ -30,6 +30,7 @@ export interface FeedItem extends Item {
 
 export interface FeedConfig {
     url: string;
+    eventName?: string;
     ignoreFirst?: boolean;
     maxHistoryLength?: number;
     interval?: Interval;
@@ -243,7 +244,8 @@ export class FeedEmitter extends TinyEmitter {
             const maxHistory = feed.maxHistoryLength || 10;
             const len = feed.items!.length;
             feed.items = feed.items!.slice(len - maxHistory, len);
-            this.emit("item:new", item);
+            const newItemEventName = feed.eventName ? (`item:new:${feed.eventName}`) : "item:new";
+            this.emit(newItemEventName, item);
             if (this._debug) console.debug(`item = ${JSON.stringify(item)}`);
         }
     }
