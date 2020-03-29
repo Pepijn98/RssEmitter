@@ -93,8 +93,14 @@
 					<tbody><tr>
 							<td>item:new</td>
 							<td>item:  FeedItem</td>
-							<td>emits when a new item is added to the rss feed</td>
+							<td>emits when a new item is added to the rss feed (where no <code>eventName</code> is provided)</td>
 							<td>0.0.1</td>
+						</tr>
+						<tr>
+							<td>item:new<zero-width space>:[eventName]</td>
+							<td>item:  FeedItem</td>
+							<td>emits when a new item is added to the rss feed (where <code>eventName</code> is provided)</td>
+							<td>0.5.0</td>
 						</tr>
 						<tr>
 							<td>feed:init</td>
