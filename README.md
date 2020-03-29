@@ -20,7 +20,8 @@ https://kurozeropb.github.io/RssEmitter/
 
 | Emitted events | Params            | Description                                                  | Since |
 |----------------|-------------------|--------------------------------------------------------------|-------|
-| item:new       | item:  FeedItem   | emits when a new item is added to the rss feed               | 0.0.1 |
+| item:new       | item:  FeedItem   | emits when a new item is added to the rss feed (where no `eventName` is provided)               | 0.0.1 |
+| item:new<zero-width space>:\[eventName\]       | item:  FeedItem   | emits when a new item is added to the rss feed (where `eventName` is provided)              | 0.5.0 |
 | feed:init      | feed:  FeedConfig | emits when a feed is done loading it's initial items         | 0.3.0 |
 | feed:new       | feed:  FeedConfig | emits when a new feed is added using FeedEmitter#add()       | 0.3.0 |
 | feed:update    | feed:  FeedConfig | emits when an existing feed is added using FeedEmitter#add() | 0.3.0 |
