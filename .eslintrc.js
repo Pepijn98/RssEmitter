@@ -1,23 +1,21 @@
 module.exports = {
-    "plugins": [
-        "@typescript-eslint"
-    ],
+    "plugins": ["@typescript-eslint"],
     "env": {
         "es6": true,
         "node": true
     },
-    "extends": [
-        "plugin:@typescript-eslint/recommended"
-    ],
+    "extends": ["plugin:@typescript-eslint/recommended"],
     "parserOptions": {
         "ecmaVersion": 10,
         "parser": "@typescript-eslint/parser"
     },
     "rules": {
         "@typescript-eslint/ban-ts-ignore": "off",
-        "@typescript-eslint/explicit-function-return-type": ["error", {
+        "@typescript-eslint/explicit-function-return-type": [
+"error", {
             "allowExpressions": true
-        }],
+        }
+],
         "@typescript-eslint/interface-name-prefix": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
@@ -82,9 +80,11 @@ module.exports = {
         "curly": "off",
         "default-case": "error",
         "dot-location": ["error", "property"],
-        "dot-notation": ["error", {
+        "dot-notation": [
+"error", {
             "allowKeywords": true
-        }],
+        }
+],
         "eol-last": "error",
         "eqeqeq": "error",
         "func-call-spacing": "error",
@@ -125,9 +125,11 @@ module.exports = {
         ],
         "lines-around-comment": "off",
         "lines-around-directive": "error",
-        "lines-between-class-members": ["error", "always", {
+        "lines-between-class-members": [
+"error", "always", {
             "exceptAfterSingleLine": true
-        }],
+        }
+],
         "max-classes-per-file": [
             "error",
             5
@@ -233,7 +235,7 @@ module.exports = {
         "no-sync": [
             "error",
             {
-                "allowAtRootLevel": true,
+                "allowAtRootLevel": true
             }
         ],
         "no-tabs": "error",

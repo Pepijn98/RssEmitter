@@ -1,4 +1,3 @@
 node_modules/
 dist/
-test/
-typedoc.js
+docs/

@@ -26,7 +26,7 @@ export interface FeedItem extends Item {
     enclosures: Enclosure[];
     meta: Meta;
     [x: string]: any;
-};
+}
 
 export interface FeedConfig {
     url: string;
