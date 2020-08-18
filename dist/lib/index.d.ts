@@ -1,4 +1,3 @@
-/// <reference types="@types/feedparser" />
 import { Item, Meta, Image, Enclosure } from "feedparser";
 import Interval from "yukikaze";
 import { TinyEmitter } from "tiny-emitter";
